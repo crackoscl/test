@@ -19,11 +19,11 @@ def main():
     the DogHouse class found in the models.py file
     """
     # get credentials
-    email = input("What's is your email? ")
-    password = getpass("What's is your password? ")
+    email = input('What\'s is your email? ')
+    password = getpass('What\'s is your password? ')
     credentials = {
-        "email": email,
-        "password": password,
+        'email': email,
+        'password': password,
     }
 
     # get token
@@ -40,19 +40,19 @@ def main():
     common_dog_name = dog_house.get_common_dog_name()
 
     # print requested data
-    print("Total breeds: {}".format(total_breeds))
-    print("Total dogs: {}".format(total_dogs))
-    print("Most common breed name: {}".format(common_breed.name))
-    print("Most common dog name: {}".format(common_dog_name))
+    print('Total breeds: {}'.format(total_breeds))
+    print('Total dogs: {}'.format(total_dogs))
+    print('Most common breed name: {}'.format(common_breed.name))
+    print('Most common dog name: {}'.format(common_dog_name))
 
     data = {
-        "total_breeds": total_breeds,
-        "total_dogs": total_dogs,
-        "common_breed": common_breed.name,
-        "common_dog_name": common_dog_name,
+        'total_breeds': total_breeds,
+        'total_dogs': total_dogs,
+        'common_breed': common_breed.name,
+        'common_dog_name': common_dog_name,
     }
     dog_house.send_data(data=data, token=token)
 
 
-if __name__ == "__main__":
+if __name__ == '__main__':
     main()

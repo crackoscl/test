@@ -16,7 +16,6 @@ from typing import Dict
 BASE_URL = 'https://dogs.magnet.cl'
 
 
-
 def request(
     method: str,
     url: str,
