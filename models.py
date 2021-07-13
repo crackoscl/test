@@ -10,7 +10,6 @@ DOGS = "/api/v1/dogs/"
 BREEDS = "/api/v1/breeds/"
 ANSWER = "/api/v1/answer/"
 
-
 class Dog(object):
     """
     Dog object that is composed of the id, name and breed of the dog
@@ -98,14 +97,17 @@ class DogHouse(object):
         page_data = BASE_URL + DOGS + "?page="
         data_dogs.extend(data["results"])
         cont = 2
-        cond = True
-        while cond:
-            data2 = get(page_data + str(cont), token)
-            if "results" in data2:
-                data_dogs.extend(data2["results"])
-                cont = cont + 1
-            else:
-                cond = False
+        #cond = True
+        while "results" in (results:=get(f"{page_data}{cont}",token)):
+            data_dogs.extend(results['results'])
+            cont+=1
+        # while cond:
+        #     data2 = get(page_data + str(cont), token)
+        #     if "results" in data2:
+        #         data_dogs.extend(data2["results"])
+        #         cont = cont + 1
+        #     else:
+        #         cond = False
 
         data_breeds = get(BASE_URL + BREEDS + "?limit=200", token)
 
@@ -188,9 +190,10 @@ class DogHouse(object):
         raise NotImplementedError
 
     def send_data(self, data: dict, token: str):
+        pass
 
-        post_data = post(BASE_URL+ANSWER,data,token)
-        return post_data
+        # post_data = post(BASE_URL+ANSWER,data,token)
+        # return post_data
         """
         You must send the answers obtained from the implemented
         methods, the parameters are defined in the documentation.
