@@ -200,4 +200,4 @@ class DogHouse(object):
 
         Important!! We don't tell you if the answer is correct
         """
-        raise NotImplementedError
+        #raise NotImplementedError
