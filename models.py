@@ -92,33 +92,24 @@ class DogHouse(object):
         self.dogs: List[Dog] = []
 
     def get_data(self, token: str):
-        data_dogs = []
-        data = get(BASE_URL + DOGS, token)
-        page_data = BASE_URL + DOGS + "?page="
-        data_dogs.extend(data["results"])
-        cont = 2
-        #cond = True
-        while "results" in (results:=get(f"{page_data}{cont}",token)):
-            data_dogs.extend(results['results'])
-            cont+=1
-        # while cond:
-        #     data2 = get(page_data + str(cont), token)
-        #     if "results" in data2:
-        #         data_dogs.extend(data2["results"])
-        #         cont = cont + 1
-        #     else:
-        #         cond = False
+        data_dog = get(BASE_URL + DOGS, token)
+        page = data_dog['next']
+        while "next" in (results:=get(f"{page}",token)):
+            data_dog["results"].extend(results["results"])
+            if results["next"]:
+                page = results["next"]
+            else:
+                break
 
         data_breeds = get(BASE_URL + BREEDS + "?limit=200", token)
 
-        for breed in data_breeds["results"]:
-            dogs_list = [x for x in data_dogs if x["breed"] == breed["id"]]
-            breed_instance = Breed(breed["id"], breed["name"])
-            for dog in dogs_list:
-                dog_instance = Dog(dog["id"], dog["name"], breed_instance.id)
-                self.dogs.append(dog_instance)
-                breed_instance.add_dog(dog_instance)
-            self.breeds.append(breed_instance)
+        breeds = {breed["id"]: Breed(breed["id"], breed["name"]) for breed in data_breeds["results"]}
+        dogs = [Dog(dog["id"], dog["name"], dog["breed"]) for dog in data_dog["results"]]
+        for dog in dogs:
+            breeds[dog.breed].add_dog(dog)
+        self.breeds = list(breeds.values())
+        self.dogs = dogs
+
         """
         You must get breeds and dogs data from our API: http://dogs.magnet.cl
 
@@ -126,9 +117,6 @@ class DogHouse(object):
         the information, also consider the dogs and breeds fields
         of the DogHouse class to perform data manipulation.
         """
-        return self.breeds, self.dogs
-
-        raise NotImplementedError
 
     def get_total_breeds(self) -> int:
         """
@@ -141,7 +129,6 @@ class DogHouse(object):
                 list_breeds.append(breed.name)
         return len(list_breeds)
 
-        raise NotImplementedError
 
     def get_total_dogs(self) -> int:
         """
@@ -149,7 +136,6 @@ class DogHouse(object):
         """
         return len(self.dogs)
 
-        raise NotImplementedError
 
     def get_common_breed(self) -> Breed:
         """
@@ -165,7 +151,6 @@ class DogHouse(object):
 
         return common_breed
 
-        raise NotImplementedError
 
     def get_common_dog_name(self) -> str:
         """
@@ -187,8 +172,6 @@ class DogHouse(object):
         common_dog = max(dog_name, key=dog_name.get)
         return common_dog
 
-        raise NotImplementedError
-
     def send_data(self, data: dict, token: str):
         pass
 
@@ -200,4 +183,3 @@ class DogHouse(object):
 
         Important!! We don't tell you if the answer is correct
         """
-        #raise NotImplementedError
